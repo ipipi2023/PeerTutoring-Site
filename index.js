@@ -8,6 +8,15 @@ const expressSession = require('express-session');
 
 const app = new express();
 
+//connecting to database 
+mongoose.connect('mongodb://localhost/peertutor');
+
+//import controllers
+const homePageController = require('./controllers/homePageController');
+const getResumePageController = require('./controllers/getResumePage');
+const getAppointmentPageController = require('./controllers/getAppointmentPage');
+const getCoursesPageController = require('./controllers/getCoursesPage');
+
 //middleware
 app.use(express.static('public'));// get static files 
 app.use(fileUpload())//fileupload- image in this case
@@ -21,21 +30,13 @@ app.use(expressSession({
 }));
 
 //routing
-app.get('/', (req,res) => {
-    res.render('index');
-})
+app.get('/', homePageController);
 
-app.get('/resume', (req,res) => {
-    res.render('resume');
-})
+app.get('/resume', getResumePageController);
 
-app.get('/projects', (req,res) => {
-    res.render('projects');
-})
+app.get('/appointment', getAppointmentPageController);
 
-app.get('/contact', (req,res) => {
-    res.render('contact');
-})
+app.get('/courses', getCoursesPageController);
 
 
 // Start server
